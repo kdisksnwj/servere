@@ -1,23 +1,17 @@
-import requests
-import time
-import os
+<h1>Connexions live</h1>
 
-URL = "https://chat-server-1xnj.onrender.com/status"
+<p>Utilisateurs en ligne: <span id="count">0</span></p>
+<p id="list"></p>
 
-while True:
-    try:
-        r = requests.get(URL, timeout=5)
-        data = r.json()
+<script>
+async function update() {
+  const r = await fetch("https://chat-server-1xnj.onrender.com/status");
+  const data = await r.json();
 
-        online = data.get("online", 0)
+  document.getElementById("count").innerText = data.online;
+  document.getElementById("list").innerText = data.clients.join(", ");
+}
 
-        os.system("cls")  # Windows clear screen
-        print("🔵 Serveur connecté")
-        print(f"👥 Utilisateurs en ligne : {online}")
-
-    except Exception as e:
-        os.system("cls")
-        print("🔴 Impossible de contacter le serveur")
-        print("Erreur:", e)
-
-    time.sleep(2)
+setInterval(update, 2000);
+update();
+</script>
